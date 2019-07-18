@@ -23,19 +23,19 @@ Looking for [Rails](../Ruby-on-Rails-Cheatsheet.md)?
 
 ## Basics
 
-- `$ irb`: to write ruby in the terminal
-- don't use `'` in ruby, use `"` instead
-- you can replace most `{}` with `do end` and vice versa –– not true for hashes or `#{}` escapings
-- Best Practice: end names that produce booleans with question mark
+- `$ irb`: to write Ruby in the terminal
+- Use `"` instead of `'`
+- You can replace most `{}` with `do end` and vice versa –– not true for hashes or `#{}` escapings
+- End names that produce booleans with question mark
 - CRUD: create, read, update, delete
 - `[1,2].map(&:to_i)`
 - `integer`: number without decimal
 - `float`: number with decimal
-- tag your variables:
+- Tag your variables:
 - - `$`: global variable
 - - `@`: instance variable
 - - `@@`: class variable
-- `1_000_000`: 1000000 –– just easier to read\*
+- `1_000_000`: 1000000 –– easier to read\*
 
 ## Vars, Contants, Arrays, Hashes & Symbols
 
@@ -199,7 +199,7 @@ Rabbit.jump # extend
 
 ### Code Blocks
 
-_Blocks are not objects_ A block is just a bit of code between do..end or {}. It's not an object on its own, but it can be passed to methods like .each or .select.
+_Blocks are not objects_ A block is a bit of code between do..end or {}. It's not an object on its own, but it can be passed to methods like ```.each``` or ```.select```.
 
 ```Ruby
 def yield_name(name)
