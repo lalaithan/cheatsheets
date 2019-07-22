@@ -1,10 +1,10 @@
-[back to overwiev](/../..)
+[Back to Overview](/../..)
 
-# Docker Cheatsheet
+# Docker Cheat Sheet
 
 ## Table of Contents
 
-- [Install](#install)
+- [Installation](#installation)
 - - …
 - [Basics](#basics)
 - - …
@@ -31,7 +31,7 @@
 - [Troubleshooting](#troubleshooting)
 - - [Permission denied](#permission-denied)
 
-## Install
+## Installation
 
 Docker: https://www.docker.com/products  
 Docker Compose: https://docs.docker.com/compose/install/  
@@ -41,134 +41,135 @@ Docker Compose: https://docs.docker.com/compose/install/
 
 #### Docker
 
-```
-wget -qO- https://get.docker.com/ | sh
+```bash
+$ wget -qO- https://get.docker.com/ | sh
 ```
 
 #### Docker-Compose
 
-```
-curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+```bash
+$ curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+$ chmod +x /usr/local/bin/docker-compose
 ```
 
 ## Basics
 
 ### What are Containers
 
-A _virtual machine_ grabs CPU, MEM, DISKIO, NETWORK, etc. and slices it into virtual variants to build virtual machines that look and feel like real physical servers.
+A _virtual machine_ grabs CPU, MEM, DISKIO, NETWORK, and so on. It slices them into virtual variants to build virtual machines that look and feel like real physical servers.
 
-Docker on the other hand, instead of slicing physical resources it slices operating system resources. I.e. Process Namespace, Network Stack, File System. Every container gets its own version of those.
+Docker, on the other hand, slices operating system resources, for example, process namespace, network stack, and file system. Every container gets its own.
 
-Docker creates more like a virtual operating system that share the same physical resources. Which is way more lightweight than virtual machines.
+What Docker creates is more like a virtual operating system that shares the same physical resources. This is more lightweight than a virtual machine.
 
 ### Version
 
-```
-docker -v
+Show version of client and server by running the following command:
+
+```bash
+$ docker -v
 ```
 
-Shows Version of client and server.
-
-Docker Client is the interface that takes commands and run the respective API calls to the Deamon.
+Docker Client is the interface that takes commands and runs the respective API calls to the daemon.
 
 ### Info
 
-```
-docker info
-```
+Show what is going on on a host, for example, running containers and version information:
 
-Shows what is going on on a host. I.e. running containers. Version info.
-
+```bash
+$ docker info
 ```
-docker node ls
-```
+List all Docker nodes in a swarm:
 
-lists all docker nodes in a swarm
+```bash
+$ docker node ls
+```
 
 ## Containers
 
 ### Run
 
-```
-docker run hello-world
-```
-
-`hello-world` here is the name of a docker image.
-
-```
-docker run -d --name web -p 80:8080 foo/bar
+```bash
+$ docker run <image name>
 ```
 
-`-d`: run in background  
-`--name web`: give it a friendly unique name  
-`-p 80:8080`: map a port inside the container (here 8080) to a port on the machine (here 80)  
-`foo/bar`: get the image named `bar` from user `foo`
-
-```
-docker run -it --name temp ubuntu:latest /bin/bash
+An example of this is:
+```bash
+$ docker run -d --name web -p 80:8080 foo/bar
 ```
 
-`-it`: in interactive terminal mode (ssh inside the container)  
-`/bin/bash`: run bash process (give me a terminal that allows me to interact with that container)  
-You usually don’t do that.  
-Inside, you can run `ctrl+P+Q` to quit without exiting the process.
+Broken down:
 
-### list
+`-d`: Run in background.
+`--name web`: Give it a friendly, unique name.
+`-p 80:8080`: Map a port inside the container (here 8080) to a port on the machine (here 80). 
+`foo/bar`: Get the image named `bar` from user `foo`.
 
 ```bash
-docker ps
-docker ps -a
-docker ps -aq
+$ docker run -it --name temp ubuntu:latest /bin/bash
+```
+
+Broken down:
+
+`-it`: Run in interactive terminal mode (use SSH inside the container). 
+`/bin/bash`: Run Bash process (gives you a terminal that allows you to interact with that container).
+
+This is not usually done.  Instead, you can enter `Ctrl+P+Q` to quit without exiting the process.
+
+### List
+
+```bash
+$ docker ps
+$ docker ps -a
+$ docker ps -aq
 ...
 ```
 
-see [Processes](#processes)
+See [Processes](#processes)
 
-### start / stop / rm
+### Start / Stop / rm
 
-```
-docker start <container>
-docker stop <container>
-docker rm <container>
-```
-
-`docker rm` completely removes it as opposed to `stop`.
-
-```
-docker stop $(docker ps -aq)
+```bash
+$ docker start <container>
+$ docker stop <container>
+$ docker rm <container>
 ```
 
-runs docker stop against the output of `docker ps -aq`:  
-`-aq`: all containers in quiet mode (q = just the IDs).
+`$ docker rm` Completely removes container as opposed to `stop`.
 
-### exec
-
+```bash
+$ docker stop $(docker ps -aq)
 ```
-docker exec <id> <command>
-docker exec d63 node foo.js
-```
+This command runs Docker ```stop``` against the output of `docker ps -aq`:  
+`-aq`: This option puts all containers in quiet mode (```q``` = just the IDs).
 
-Executes a command inside a running docker container
+### Exec
 
-### logs
-
-```
-docker logs <id>
+```bash
+$ docker exec <id> <command>
+$ docker exec d63 node foo.js
 ```
 
-Outputs the logs of that container
+Executes a command inside a running Docker container.
 
-### "SSH" (Bash) into a container
+### Logs
 
-1. Use docker ps to get the name of the existing container.
-2. Get a bash shell in the container.
+```bash
+$ docker logs <id>
+```
+
+Outputs logs of that container.
+
+### "SSH" (Bash) Into a Container
+
+1. Use ```$ docker ps``` to get the name of the existing container.
+2. Get a Bash shell into the container.
 
 ```bash
 docker exec -it <container name> /bin/bash
 ```
 
-_Note: Generically, use `docker exec -it <container name> <command>` to execute whatever command you specify in the container._
+_Note: Generally, use `docker exec -it <container name> <command>` to execute whatever command you specify in the container._
 
 ## Container Volumes
 
